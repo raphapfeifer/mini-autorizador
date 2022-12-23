@@ -13,15 +13,24 @@ public class CartaoServiceImpl implements ICartaoService {
     ICartaoDao dao;
 
     @Override
-    public Cartao findById(Long numeroCartao) {
-        return dao.findOne(numeroCartao);
+    public Double retornaSaldo(Long numeroCartao) {
+        return dao.retornaSaldo(numeroCartao);
     }
 
     @Override
     public Cartao insert(Cartao cartao) {
-        if(findById(cartao.getNumeroCartao()) == null){
+        if(dao.findOne(cartao.getNumeroCartao()) == null){
             return dao.saveAndFlush(cartao);
         }
         throw new UnsupportedOperationException("Esse cartão já está cadastrado");
+    }
+
+    @Override
+    public String transacao(Cartao cartao) {
+
+
+
+
+        return null;
     }
 }

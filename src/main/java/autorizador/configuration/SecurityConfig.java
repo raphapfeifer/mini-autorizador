@@ -23,7 +23,8 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter {
                 .and().cors().and() // responsavel por desabilitar o cors
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/cartoes/**").permitAll()
+                //.antMatchers("/cartoes/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .and()
                 .httpBasic();

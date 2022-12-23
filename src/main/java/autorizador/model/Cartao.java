@@ -19,7 +19,7 @@ public class Cartao {
     @Column(name = "SENHA")
     private String senha;
 
-    @Column(name = "VALOR")
-    private Double valor;
+    @Column(name = "VALOR_SALDO")
+    private Double valorSaldo;
 
 }

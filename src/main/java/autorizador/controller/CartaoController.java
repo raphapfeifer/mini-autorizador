@@ -14,21 +14,28 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class CartaoController {
 
-    private static final String BASE_URL = "cartoes/";
+    private static final String BASE_URL = "cartoes";
 
     @Autowired
     ICartaoService service;
 
-    @GetMapping(value = BASE_URL + "numero-cartao", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, params = {"numeroCartao"})
+    @GetMapping(value ="cartoes", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, params = {"numeroCartao"})
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<Cartao> findById(@RequestParam(name = "numeroCartao") Long numeroCartao){
-        return ResponseEntity.ok(service.findById(numeroCartao));
+    public ResponseEntity<Double> retornaSaldo(@RequestParam(name = "numeroCartao") Long numeroCartao){
+        return ResponseEntity.ok(service.retornaSaldo(numeroCartao));
     }
 
-    @PostMapping(value = BASE_URL + "insert", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "cartoes", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<Cartao> insert(@RequestBody CartaoDto cartaoDto){
         return ResponseEntity.ok(service.insert(ICartaoMapper.INSTANCE.dtoToEntity(cartaoDto)));
     }
+
+    @PostMapping(value = "transacoes", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<String> transacao(@RequestBody CartaoDto cartaoDto){
+        return ResponseEntity.ok(service.transacao(ICartaoMapper.INSTANCE.dtoToEntity(cartaoDto)));
+    }
+
 
 }
