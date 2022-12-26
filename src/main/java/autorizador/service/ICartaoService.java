@@ -10,4 +10,6 @@ public interface ICartaoService {
 
     String transacao(Cartao cartao);
 
+    Cartao findById(Long numeroCartao);
+
 }

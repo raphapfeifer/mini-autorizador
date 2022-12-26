@@ -1,6 +1,7 @@
 package autorizador.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CARTAO")
 @Data
+@EqualsAndHashCode
 public class Cartao {
 
     @Id
