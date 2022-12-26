@@ -2,13 +2,15 @@ package autorizador.service;
 
 import autorizador.model.Cartao;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface ICartaoService {
 
-    Double retornaSaldo(Long numeroCartao);
+    CompletableFuture<Double> retornaSaldo(Long numeroCartao);
 
-    Cartao insert(Cartao cartao);
+    CompletableFuture<Cartao> insert(Cartao cartao);
 
-    String transacao(Cartao cartao);
+    CompletableFuture<String> transacao(Cartao cartao);
 
     Cartao findById(Long numeroCartao);
 

@@ -6,10 +6,12 @@ import autorizador.model.Cartao;
 import autorizador.service.ICartaoService;
 import autorizador.util.CartaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 
 @Service
@@ -21,38 +23,41 @@ public class CartaoServiceImpl implements ICartaoService {
 
 
     @Override
-    public Double retornaSaldo(Long numeroCartao) {
-        return dao.retornaSaldo(numeroCartao);
+    @Async
+    public CompletableFuture<Double> retornaSaldo(Long numeroCartao) {
+        return CompletableFuture.completedFuture(dao.retornaSaldo(numeroCartao));
     }
 
     @Override
-    public Cartao insert(Cartao cartao) {
+    @Async
+    public CompletableFuture<Cartao> insert(Cartao cartao) {
         if (findById(cartao.getNumeroCartao()) == null) {
-            return dao.saveAndFlush(cartao);
+            return CompletableFuture.completedFuture(dao.saveAndFlush(cartao));
         }
         throw new UnsupportedOperationException("Esse cartão já está cadastrado");
     }
 
     @Override
-    public String transacao(Cartao cartao) {
+    @Async
+    public CompletableFuture<String> transacao(Cartao cartao) {
         try{
             Cartao cartaoVerificado = findById(cartao.getNumeroCartao());
             if(cartaoVerificado == null){
-                return StatusEnum.CARTAO_INEXISTENTE.getDescricao();
+                return CompletableFuture.completedFuture(StatusEnum.CARTAO_INEXISTENTE.getDescricao());
             }
             String erros = verificaCampos(cartaoVerificado,cartao);
             if(erros.isEmpty()){
                 cartao.setValorSaldo(CartaoUtils.calculaTransacao(cartaoVerificado.getValorSaldo(), cartao.getValorSaldo()));
                 dao.saveAndFlush(cartao);
-                return StatusEnum.TRANSACAO_EFETUADA.getDescricao();
+                return CompletableFuture.completedFuture(StatusEnum.TRANSACAO_EFETUADA.getDescricao());
             }
-            return erros;
+            return CompletableFuture.completedFuture(erros);
         }catch(Exception e){
             throw new UnsupportedOperationException( "" + e.getMessage());
         }
     }
 
-    public String verificaCampos(Cartao cartaoVerificado,Cartao cartao){
+    private String verificaCampos(Cartao cartaoVerificado,Cartao cartao){
         boolean ok = true;
         Map<StatusEnum,Boolean> erros = new HashMap<StatusEnum,Boolean>();
         String resposta = "";
@@ -80,6 +85,7 @@ public class CartaoServiceImpl implements ICartaoService {
     }
 
     @Override
+    @Async
     public Cartao findById(Long numeroCartao) {
         return dao.findOne(numeroCartao);
     }
